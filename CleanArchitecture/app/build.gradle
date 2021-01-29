@@ -45,10 +45,6 @@ dependencies {
     implementation SupportDependencies.constraintlayout
     implementation SupportDependencies.material_design
     implementation SupportDependencies.swipe_refresh_layout
-    implementation project(path: ':')
-    implementation project(path: ':')
-    implementation project(path: ':')
-
     //Test
 
     testImplementation 'junit:junit:4.+'
