@@ -1,6 +1,7 @@
 package dependencies
 
 object Versions {
+    val firebase_bom = "26.4.0"
     val gradle = "4.1.0"
     val build_tools =  "30.0.1"
     val compilesdk = 30
@@ -16,7 +17,7 @@ object Versions {
     val constraintlayout = "1.1.3"
     val material_design = "1.1.0"
     val play_core = "1.7.1"
-    val play_services = "4.3.3"
+    val play_services = "4.3.5"
     val leak_canary = "2.0-alpha-3"
     val swipe_refresh_layout = "1.1.0-alpha03"
     val firebase_firestore = "21.4.2"
