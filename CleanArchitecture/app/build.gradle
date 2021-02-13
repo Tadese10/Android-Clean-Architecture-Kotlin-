@@ -5,6 +5,8 @@ plugins {
     id 'kotlin-android'
     id 'kotlin-android-extensions'
     id 'kotlin-kapt'
+    id 'com.google.firebase.crashlytics'
+    id 'com.google.gms.google-services'
 }
 
 android {
@@ -18,15 +20,30 @@ android {
         versionCode Application.version_code
         versionName Application.version_name
 
-        testInstrumentationRunner AndroidTestDependencies.test_runner
+        testInstrumentationRunner AndroidTestDependencies.instrumentation_runner
+    }
+
+    sourceSets {
+        test.resources.srcDirs += 'src/test/res'
     }
 
     buildTypes {
+        debug {
+            minifyEnabled false
+            manifestPlaceholders = [enableCrashReporting:"false"]
+        }
         release {
             minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            manifestPlaceholders = [enableCrashReporting:"true"]
         }
     }
+
+    testOptions {
+        unitTests.all {
+            useJUnitPlatform()
+        }
+    }
+
     compileOptions {
         sourceCompatibility Java.java_version
         targetCompatibility Java.java_version
@@ -34,6 +51,13 @@ android {
     kotlinOptions {
         jvmTarget = Java.java_version
     }
+
+    //Alternative to Junit5 dependency
+//    testOptions{
+//        unitTests.all{
+//            useJunitPlatform()
+//        }
+//    }
 }
 
 dependencies {
@@ -42,9 +66,55 @@ dependencies {
     implementation Dependencies.kotlin_reflect
     implementation Dependencies.ktx //kotlin core
 
+    //Dependencies
+    implementation Dependencies.dagger
+    implementation Dependencies.firebase_firestore
+    implementation Dependencies.firebase_auth
+    implementation Dependencies.firebase_analytics
+    implementation Dependencies.firebase_crashlytics
+    implementation Dependencies.firebase_bom
+    implementation Dependencies.kotlin_coroutines
+    implementation Dependencies.kotlin_coroutines_android
+    //To return caroutine from the firestore task
+    implementation Dependencies.kotlin_coroutines_play_services
+    implementation Dependencies.retrofit
+    implementation Dependencies.retrofit_gson
+    implementation Dependencies.room_ktx
+    implementation Dependencies.room_runtime
+    implementation AndroidTestDependencies.idling_resource
+    implementation Dependencies.navigation_runtime
+    implementation Dependencies.navigation_ui
+    implementation Dependencies.navigation_fragment
+    implementation Dependencies.navigation_dynamic
+    implementation Dependencies.material_dialogs
+    implementation Dependencies.material_dialogs_input
+    implementation Dependencies.markdown_processor
+
+
+    androidTestImplementation AndroidTestDependencies.test_rules
+    androidTestImplementation AndroidTestDependencies.text_core_ktx
+    androidTestImplementation AndroidTestDependencies.navigation_testing
+    debugImplementation AndroidTestDependencies.fragment_testing
+    kaptAndroidTest  AnnotationProcessing.dagger_compiler
+    androidTestImplementation AndroidTestDependencies.test_runner
+
+
+    //Annotation Processing
+    kapt AnnotationProcessing.dagger_compiler
+    kapt AnnotationProcessing.room_compiler
+
+
     //Support
     implementation SupportDependencies.appcompat
     implementation SupportDependencies.constraintlayout
     implementation SupportDependencies.material_design
     implementation SupportDependencies.swipe_refresh_layout
+
+    //Unit Tests
+    testImplementation TestDependencies.mockk
+    testImplementation TestDependencies.jupiter_api
+    testRuntimeOnly TestDependencies.jupiter_engine
+    testImplementation TestDependencies.jupiter_params
+    testImplementation TestDependencies.junit4 // We need this to do some assertions not to run the test itself
+
 }
